@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/layout_sechand"
+    android:weightSum="1"
+    android:visibility="gone"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="Second-hand info:"
+        android:textSize="20dp"
+        android:id="@+id/show_text_sechand"
+        android:textColor="#354ca7" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/list_sechand"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <EditText
+            android:layout_width="314dp"
+            android:layout_height="wrap_content"
+            android:hint="Your comments..."
+            android:id="@+id/edit_sechand" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="add"
+            android:id="@+id/button_sechand_add" />
+
+    </LinearLayout>
+
+</LinearLayout>

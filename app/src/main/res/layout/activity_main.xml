@@ -11,7 +11,12 @@
     <include layout="@layout/layout_borrowed" />
     <include layout="@layout/layout_reserved" />
     <include layout="@layout/layout_search" />
-    <include layout="@layout/layout_book" />
+    <include layout="@layout/layout_bookinfo" />
+    <include layout="@layout/layout_review" />
+    <include layout="@layout/layout_sechand"/>
+    <include layout="@layout/layout_user"/>
+
+
 
     <ProgressBar
         android:id="@+id/progerss_bar"
