@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
 
     public LinearLayout borrowedLayout;
     public ListView borrowedListView;
-    public Button renewalButton;
 
     public LinearLayout reservedLayout;
     public ListView reservedListView;
@@ -78,9 +77,14 @@ public class MainActivity extends AppCompatActivity {
     public ListView searchListView;
 
     public LinearLayout userLayout;
+    public TextView userNameTextView;
+    public TextView userIdTextView;
+    public TextView userPhoneTextView;
+    public TextView userAddressTextView;
+    public TextView userEmailTextView;
 
     public LinearLayout bookInfoLayout;
-    public TextView boooInfoTitileTextView, bookInfoAuthorTextView, bookInfoCallNumberTextView;
+    public TextView bookInfoTitileTextView, bookInfoAuthorTextView, bookInfoCallNumberTextView;
     public TextView bookInfoIsbnTextView, bookInfoStatusTextView, bookInfoLocationTextView;
     public Button bookInfoReserveButton;
     public Button bookInfoReviewButton;
@@ -129,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
 
         borrowedLayout = (LinearLayout) findViewById(R.id.layout_borrowed);
         borrowedListView = (ListView) findViewById(R.id.list_borrowed);
-        renewalButton = (Button) findViewById(R.id.borrowed_item_button_renewal);
 
         reservedLayout = (LinearLayout) findViewById(R.id.layout_reserved);
         reservedListView = (ListView) findViewById(R.id.list_reserved);
@@ -139,9 +142,14 @@ public class MainActivity extends AppCompatActivity {
         searchListView = (ListView) findViewById(R.id.list_search);
 
         userLayout = (LinearLayout) findViewById(R.id.layout_user);
+        userNameTextView = (TextView) findViewById(R.id.text_user_name);
+        userIdTextView = (TextView) findViewById(R.id.text_user_id);
+        userPhoneTextView = (TextView) findViewById(R.id.text_user_phone);
+        userAddressTextView = (TextView) findViewById(R.id.text_user_address);
+        userEmailTextView = (TextView) findViewById(R.id.text_user_email);
 
-        bookInfoLayout = (LinearLayout) findViewById(R.id.layout_BookInfo);
-        boooInfoTitileTextView = (TextView) findViewById(R.id.show_title);
+        bookInfoLayout = (LinearLayout) findViewById(R.id.layout_bookinfo);
+        bookInfoTitileTextView = (TextView) findViewById(R.id.show_title);
         bookInfoAuthorTextView = (TextView) findViewById(R.id.show_author);
         bookInfoIsbnTextView = (TextView) findViewById(R.id.show_isbn);
         bookInfoCallNumberTextView = (TextView) findViewById(R.id.show_num);
@@ -190,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 searchSearchView.setQuery(s, true);
-                menuSearchView.clearFocus();
+//                menuSearchView.;
                 changeView(searchLayout);
                 return false;
             }
@@ -238,17 +246,9 @@ public class MainActivity extends AppCompatActivity {
                 Map<String, Object> map= (HashMap<String, Object>)borrowedListView.getItemAtPosition(i);
                 String book_id = (String) map.get("book_id");
                 Toast.makeText(MainActivity.this, book_id, Toast.LENGTH_SHORT).show();
-                //do reserve here
+                //do renew here
             }
         });
-
-        //想说可以在已借列表里进行续借的… 但是这样写会崩溃… 先留着…
-//        renewalButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(MainActivity.this, "Renewel func needs to inplement...", Toast.LENGTH_SHORT).show();
-//            }
-//        });
 
         reservedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -374,18 +374,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void userHelper(){
-        TextView username = (TextView) findViewById(R.id.user_username);
-        TextView id = (TextView) findViewById(R.id.user_id);
-        TextView phone = (TextView) findViewById(R.id.user_phone);
-        TextView address = (TextView) findViewById(R.id.user_address);
-        TextView email = (TextView) findViewById(R.id.user_email);
 
-        username.setText("Park");
-        id.setText("2014141463007");
-        phone.setText("13223332333");
-        address.setText("7th block");
-        email.setText("233@gmail.com");
 
+        userNameTextView.setText("Park");
+        userIdTextView.setText("2014141463007");
+        userPhoneTextView.setText("13223332333");
+        userAddressTextView.setText("7th block");
+        userEmailTextView.setText("233 AT gmail.com");
         changeView(userLayout);
     }
 
@@ -508,23 +503,36 @@ public class MainActivity extends AppCompatActivity {
         //send query
         //list in search layout
         //change layout
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams param = new RequestParams();
+        param.put("query", s);
+        client.post(url + "search.php", param, new AsyncHttpResponseHandler() {
+            @Override
+            public void onStart() {
+                super.onStart();
+                Toast.makeText(MainActivity.this, "connect...plz wait", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
 
                 //recieved info from server
-
-//                    JSONArray resultArray = new JSONArray(new String(responseBody));
+                try {
+                    JSONArray resultArray = new JSONArray(new String(responseBody));
                     List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
                     Map<String, Object> map;
-//                    for (int i=0; i < resultArray.length(); i++) {
-//                        JSONObject item = new JSONObject(resultArray.getString(i));
+                    for (int i=0; i < resultArray.length(); i++) {
+                        JSONObject item = new JSONObject(resultArray.getString(i));
                         map = new HashMap<String, Object>();
-                        map.put("title", "title");
-                        map.put("author", "author");
-                        map.put("isbn", "isbn");
-                        map.put("call_num", "call_num");
-                        map.put("status", "status");
+                        map.put("title", item.getString("title"));
+                        map.put("author", item.getString("author"));
+                        map.put("isbn", item.getString("isbn"));
+                        map.put("call_num", item.getString("call_num"));
+                        map.put("status", item.getString("status"));
                         list.add(map);
 
-
+                    }
                     //from instance, change listView
                     SimpleAdapter adapter = new SimpleAdapter(MainActivity.this, list,
                             R.layout.list_item_search,
@@ -535,84 +543,34 @@ public class MainActivity extends AppCompatActivity {
                     searchListView.setAdapter(adapter);
                     changeView(searchLayout);
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "JSON error", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-
-
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                System.out.println(String.valueOf(statusCode));
+                Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
-
-//    public void searchHelper(String s) {
-//        Toast.makeText(MainActivity.this, "search: " + s, Toast.LENGTH_SHORT).show();
-//        //send query
-//        //list in search layout
-//        //change layout
-//        AsyncHttpClient client = new AsyncHttpClient();
-//        RequestParams param = new RequestParams();
-//        param.put("query", s);
-//        client.post(url + "search.php", param, new AsyncHttpResponseHandler() {
-//            @Override
-//            public void onStart() {
-//                super.onStart();
-//                Toast.makeText(MainActivity.this, "connect...plz wait", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
-//
-//                //recieved info from server
-//                try {
-//                    JSONArray resultArray = new JSONArray(new String(responseBody));
-//                    List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-//                    Map<String, Object> map;
-//                    for (int i=0; i < resultArray.length(); i++) {
-//                        JSONObject item = new JSONObject(resultArray.getString(i));
-//                        map = new HashMap<String, Object>();
-//                        map.put("title", item.getString("title"));
-//                        map.put("author", item.getString("author"));
-//                        map.put("isbn", item.getString("isbn"));
-//                        map.put("call_num", item.getString("call_num"));
-//                        map.put("status", item.getString("status"));
-//                        list.add(map);
-//
-//                    }
-//                    //from instance, change listView
-//                    SimpleAdapter adapter = new SimpleAdapter(MainActivity.this, list,
-//                            R.layout.list_item_search,
-//                            new String[]{"title", "author", "isbn", "call_num", "status"},
-//                            new int[]{R.id.search_item_title, R.id.search_item_author,
-//                                    R.id.search_item_isbn, R.id.search_item_call_num,
-//                                    R.id.search_item_status});
-//                    searchListView.setAdapter(adapter);
-//                    changeView(searchLayout);
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    Toast.makeText(MainActivity.this, "JSON error", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//                System.out.println(String.valueOf(statusCode));
-//                Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-
 
 
     public void bookInfoHelper(String call_num) {
-        changeView(bookInfoLayout);
+
         Toast.makeText(MainActivity.this, "this is the book: " + call_num, Toast.LENGTH_SHORT).show();
 
 
-        boooInfoTitileTextView.setText("title");
+        bookInfoTitileTextView.setText("title");
         bookInfoAuthorTextView.setText("author");
         bookInfoIsbnTextView.setText("isbn");
         bookInfoCallNumberTextView.setText("call_num");
         bookInfoStatusTextView.setText("status");
         bookInfoLocationTextView.setText("location");
 
+        changeView(bookInfoLayout);
     }
 
     public void reviewHelper(){
@@ -649,6 +607,7 @@ public class MainActivity extends AppCompatActivity {
 //                    for (int i=0; i < resultArray.length(); i++) {
 //                        JSONObject item = new JSONObject(resultArray.getString(i));
         map = new HashMap<String, Object>();
+        map.put("username", "Park");
         map.put("content", "I'm sechand info...");
 
         list.add(map);
@@ -656,8 +615,8 @@ public class MainActivity extends AppCompatActivity {
         //from instance, change listView
         SimpleAdapter adapter = new SimpleAdapter(MainActivity.this, list,
                 R.layout.list_item_sechand,
-                new String[]{"content"},
-                new int[]{R.id.sechand_item_content});
+                new String[]{"username", "content"},
+                new int[]{R.id.sechand_item_username, R.id.sechand_item_content});
         sechandListView.setAdapter(adapter);
         changeView(sechandLayout);
     }
@@ -695,7 +654,7 @@ public class MainActivity extends AppCompatActivity {
                     loginHelper();
                     changeView(menuLayout);
                     break;
-                case R.id.layout_BookInfo:
+                case R.id.layout_bookinfo:
                     changeView(searchLayout);
                     break;
                 case R.id.layout_review:

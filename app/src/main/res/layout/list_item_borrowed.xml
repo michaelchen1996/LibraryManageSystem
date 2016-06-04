@@ -61,11 +61,4 @@
 
     </LinearLayout>
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Renewal"
-        android:textSize="10dp"
-        android:id="@+id/borrowed_item_button_renewal" />
 </LinearLayout>

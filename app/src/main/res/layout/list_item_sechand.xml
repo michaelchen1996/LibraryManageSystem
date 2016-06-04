@@ -5,6 +5,13 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="username:"
+        android:textSize="20dp"
+        android:id="@+id/sechand_item_username" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="I'm second-hand information"
