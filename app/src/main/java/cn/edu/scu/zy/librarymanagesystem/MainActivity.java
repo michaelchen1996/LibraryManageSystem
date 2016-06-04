@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -21,6 +22,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.loopj.android.http.*;
+import com.xys.libzxing.zxing.activity.CaptureActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,11 +36,6 @@ import java.util.Objects;
 
 
 import cz.msebera.android.httpclient.Header;
-
-
-
-
-
 
 
 
@@ -65,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     public SearchView menuSearchView;
     public TextView readerMenuWelcomeTextView, readerMenuBorrowedTextView;
     public TextView readerMenuReservedTextView, readerMenuExpireTextView;
+    public ImageButton readerMenuScanImageButton;
 
     public LinearLayout borrowedLayout;
     public ListView borrowedListView;
@@ -130,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
         readerMenuBorrowedTextView = (TextView) findViewById(R.id.text_readermenu_borrowed);
         readerMenuReservedTextView = (TextView) findViewById(R.id.text_readermenu_reserved);
         readerMenuExpireTextView = (TextView) findViewById(R.id.text_readermenu_expire);
+        readerMenuScanImageButton = (ImageButton) findViewById(R.id.imgbutton_scan);
 
         borrowedLayout = (LinearLayout) findViewById(R.id.layout_borrowed);
         borrowedListView = (ListView) findViewById(R.id.list_borrowed);
@@ -237,6 +236,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 borrowedListHelper();
+            }
+        });
+
+        readerMenuScanImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openCameraIntent = new Intent(MainActivity.this, CaptureActivity.class);
+                startActivityForResult(openCameraIntent, 0);
             }
         });
 
@@ -635,6 +642,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            String scanResult = bundle.getString("result");
+//            resultTextView.setText(scanResult);
+            Toast.makeText(MainActivity.this, "scan: " + scanResult, Toast.LENGTH_SHORT).show();
+        }
+    }
 
 
     @Override
