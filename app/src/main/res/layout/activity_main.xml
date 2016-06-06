@@ -8,6 +8,7 @@
 
     <include layout="@layout/layout_login" />
     <include layout="@layout/layout_menu" />
+    <include layout="@layout/layout_adminmenu" />
     <include layout="@layout/layout_user" />
     <include layout="@layout/layout_borrowed" />
     <include layout="@layout/layout_reserved" />
