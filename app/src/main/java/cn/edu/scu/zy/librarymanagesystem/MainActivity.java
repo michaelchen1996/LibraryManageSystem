@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     String id;
     String pwd;
 
-//    String content;
+    String content;
     String scanResult;
 
     public FrameLayout mainLayout;
@@ -365,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void changeView(View view){
+    public void changeView(View view){
         findViewById(currentLayoutId).setVisibility(View.GONE);
         view.setVisibility(View.VISIBLE);
         currentLayoutId = view.getId();
@@ -374,15 +374,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("MY", "1");
         setContentView(R.layout.activity_main);
-        Log.d("MY", "2");
 
         currentLayoutId = R.id.layout_login;
-        Log.d("MY", "3");
 
         findAllViewById();
-        Log.d("MY", "4");
 
         setAllListener();
 
@@ -690,14 +686,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void reviewAddHelper(){
-        String content = reviewEditText.getText().toString();
+        content = reviewEditText.getText().toString();
 
         Toast.makeText(MainActivity.this, "what you bb : " + content, Toast.LENGTH_SHORT).show();
 
     }
 
     public void sechandAddHelper(){
-        String content = sechandEditText.getText().toString();
+        content = sechandEditText.getText().toString();
 
         Toast.makeText(MainActivity.this, "what you bb : " + content, Toast.LENGTH_SHORT).show();
     }
