@@ -1,5 +1,6 @@
 package cn.edu.scu.zy.librarymanagesystem;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 //import android.support.v7.app.AlertDialog;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     String id;
     String pwd;
 
-    String content;
+//    String content;
     String scanResult;
 
     public FrameLayout mainLayout;
@@ -130,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
         adminMenuLayout = (LinearLayout) findViewById(R.id.layout_adminmenu);
         adminMenuWelcomeTextView = (TextView) findViewById(R.id.text_adminmenu_welcome);
+        adminMenuAuditTextView = (TextView) findViewById(R.id.text_adminmenu_audit);
         adminMenuReaderManageTextView = (TextView) findViewById(R.id.text_adminmenu_readermanage);
         adminMenuBookManageTextView = (TextView) findViewById(R.id.text_adminmenu_bookmanage);
         adminMenuBorrowButton = (Button) findViewById(R.id.button_adminmenu_borrow);
@@ -686,14 +688,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void reviewAddHelper(){
-        content = reviewEditText.getText().toString();
+        String content = reviewEditText.getText().toString();
 
         Toast.makeText(MainActivity.this, "what you bb : " + content, Toast.LENGTH_SHORT).show();
 
     }
 
     public void sechandAddHelper(){
-        content = sechandEditText.getText().toString();
+        String content = sechandEditText.getText().toString();
 
         Toast.makeText(MainActivity.this, "what you bb : " + content, Toast.LENGTH_SHORT).show();
     }
@@ -723,7 +725,7 @@ public class MainActivity extends AppCompatActivity {
                 scanResult = bundle.getString("result");
                 Toast.makeText(MainActivity.this, "scan: " + scanResult, Toast.LENGTH_SHORT).show();
                 //get bookname from internet
-                /*
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setMessage("Return book: "+scanResult);
                 builder.setTitle("Confirm");
@@ -741,7 +743,7 @@ public class MainActivity extends AppCompatActivity {
                         dialogInterface.dismiss();
                     }
                 });
-                builder.create().show();*/
+                builder.create().show();
             }
         }
     }
@@ -754,7 +756,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.layout_login:
                     //exit
 //                    return super.onKeyDown(keyCode, event);
-                {/*
+                {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                     builder.setMessage("Quit?");
                     builder.setTitle("Confirm");
@@ -771,12 +773,12 @@ public class MainActivity extends AppCompatActivity {
                             dialogInterface.dismiss();
                         }
                     });
-                    builder.create().show();*/
+                    builder.create().show();
                     break;
                 }
                 case R.id.layout_menu:
                 case R.id.layout_adminmenu:
-                {/*
+                {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                     builder.setMessage("Logout?");
                     builder.setTitle("Confirm");
@@ -793,7 +795,7 @@ public class MainActivity extends AppCompatActivity {
                             dialogInterface.dismiss();
                         }
                     });
-                    builder.create().show();*/
+                    builder.create().show();
                     break;
                 }
                 case R.id.layout_user:
