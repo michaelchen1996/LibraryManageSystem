@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -176,6 +177,10 @@ public class MainActivity extends AppCompatActivity {
         sechandEditText = (EditText) findViewById(R.id.edit_sechand);
     }
 
+
+
+
+
     public void setAllListener() {
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -190,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //visitor login
+                borrowDialogHelper();
             }
         });
 
@@ -375,6 +381,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -446,7 +453,7 @@ public class MainActivity extends AppCompatActivity {
         userIdTextView.setText("2014141463007");
         userPhoneTextView.setText("13223332333");
         userAddressTextView.setText("7th block");
-        userEmailTextView.setText("233 AT gmail.com");
+        userEmailTextView.setText("233@gmail.com");
         changeView(userLayout);
     }
 
@@ -700,6 +707,37 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this, "what you bb : " + content, Toast.LENGTH_SHORT).show();
     }
 
+    public void borrowDialogHelper(){
+
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        final View textEntryView = inflater.inflate(R.layout.layout_dialog_borrow, null);
+        final EditText edtID = (EditText) textEntryView.findViewById(R.id.edit_dialog_borrow_id);
+        final EditText edtPsw = (EditText) textEntryView.findViewById(R.id.edit_dialog_borrow_password);
+
+        final  AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setCancelable(false);
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setTitle("Title");
+        builder.setView(textEntryView);
+        changeView(textEntryView);
+
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton){
+                Toast.makeText(MainActivity.this, "id:"+edtID.getText().toString()+"psw:"+edtPsw.getText().toString(), Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(MainActivity.this, "CANCEL", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.show();
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

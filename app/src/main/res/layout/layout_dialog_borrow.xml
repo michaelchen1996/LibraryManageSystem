@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_dialog_borrow"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone"
+    >
+    <EditText
+        android:id="@+id/edit_dialog_borrow_id"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:inputType="number"
+        android:hint="Reader ID"
+        android:textSize="24sp"
+        />
+
+    <EditText
+        android:id="@+id/edit_dialog_borrow_password"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:inputType="textPassword"
+        android:hint="Password"
+        android:textSize="24sp"
+        android:layout_alignStart="@+id/edit_id" />
+
+
+
+</LinearLayout>
