@@ -1,74 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_book_manage"
+    android:id="@+id/layout_reader_manage"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="gone">
+    android:visibility="gone"
+    >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Book manage"
+        android:text="Reader manage"
         android:textSize="25dp"
         android:textColor="#354ca7" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="＊ means must be filled for add book"
+        android:text="＊ means must be filled for add reader"
          />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="＃ means must be filled for delete book"
+        android:text="＃ means must be filled for delete reader"
         />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_callnum"
-        android:hint="call_num #"/>
+        android:id="@+id/edit_manage_id"
+        android:hint="ID *#"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_title"
+        android:id="@+id/edit_manage_username"
         android:layout_gravity="center_horizontal"
-        android:hint="Title *"/>
+        android:hint="Username *"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_author"
+        android:id="@+id/edit_manage_college"
         android:layout_gravity="center_horizontal"
-        android:hint="Author *"/>
+        android:hint="College *"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_isbn"
+        android:id="@+id/edit_manage_grade"
         android:layout_gravity="center_horizontal"
-        android:hint="ISBN *"/>
+        android:hint="Grade "/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_manage_phone"
+        android:hint="Phone "/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_manage_email"
+        android:hint="E-mail "/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edit_manage_location"
-        android:hint="Location *"/>
+        android:hint="Address "/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add / INSERT"
-        android:id="@+id/button_book_manage_add"
+        android:id="@+id/button_reader_manage_add"
         android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Delete"
-        android:id="@+id/button_book_manage_delete"
+        android:id="@+id/button_reader_manage_delete"
         android:layout_gravity="center_horizontal" />
 
 
