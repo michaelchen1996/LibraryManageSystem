@@ -8,12 +8,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,7 +37,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 import cz.msebera.android.httpclient.Header;
@@ -56,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     String pwd;
 
 //    String content;
-//    String scanResult;
+    String scanResult;
 
     public FrameLayout mainLayout;
     public ProgressBar progressBar;
@@ -444,7 +440,7 @@ public class MainActivity extends AppCompatActivity {
                         readerMenuReservedTextView.setText("Reserved(" + String.valueOf(reservedBookAmount) + ")");
                         readerMenuExpireTextView.setText("Expire-date(" + String.valueOf(expireAmount) + ")");
                         //make a QR image in info page
-                        String contentString = id + pwd;
+                        String contentString = id + ":" + pwd;
                         if (!contentString.equals("")) {
                             Bitmap qrCodeBitmap = EncodingUtils.createQRCode(contentString, 350, 350,
                                     BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
@@ -788,15 +784,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
-//                    Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
                     JSONObject resultObj = new JSONObject(new String(responseBody));
                     bookInfoTitileTextView.setText(resultObj.getString("title"));
                     bookInfoAuthorTextView.setText(resultObj.getString("author"));
                     bookInfoIsbnTextView.setText(resultObj.getString("isbn"));
                     bookInfoCallNumberTextView.setText(resultObj.getString("id"));
                     bookInfoYearTextView.setText(resultObj.getString("year"));
-//                    bookInfoStatusTextView.setText(resultObj.getString("status"));
-                    bookInfoStatusTextView.setText("");
+                    bookInfoStatusTextView.setText(resultObj.getString("status"));
                     bookInfoAbstractTextView.setText(resultObj.getString("abstract"));
                     changeView(bookInfoLayout);
                 } catch (JSONException e) {
@@ -918,7 +913,6 @@ public class MainActivity extends AppCompatActivity {
                     reviewEditText.setText("");
                     JSONObject resultObj = new JSONObject(new String(responseBody));
                     if (resultObj.getString("result").equals("true")) {
-                        reviewEditText.clearComposingText();
                         reviewHelper();
                         Toast.makeText(MainActivity.this, "Review Success", Toast.LENGTH_SHORT).show();
                     } else {
@@ -945,7 +939,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
-                    JSONArray resultArray = new JSONArray(responseBody.toString());
+                    JSONArray resultArray = new JSONArray(new String(responseBody));
                     List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
                     Map<String, Object> map;
                     for (int i=0; i < resultArray.length(); i++) {
@@ -988,7 +982,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
-                    JSONObject resultObj = new JSONObject(responseBody.toString());
+                    sechandEditText.setText("");
+                    JSONObject resultObj = new JSONObject(new String(responseBody));
                     if (resultObj.getString("result").equals("true")) {
                         reviewHelper();
                         Toast.makeText(MainActivity.this, "Publish Success", Toast.LENGTH_SHORT).show();
@@ -1011,10 +1006,9 @@ public class MainActivity extends AppCompatActivity {
     public void borrowDialog(final String book_id){
 
         LayoutInflater inflater = LayoutInflater.from(this);
-        final View textEntryView = inflater.inflate(R.layout.layout_dialog_borrow, null);
+        final View textEntryView = inflater.inflate(R.layout.dialog_borrow, null);
         final EditText edtId = (EditText) textEntryView.findViewById(R.id.edit_dialog_borrow_id);
         final EditText edtPwd = (EditText) textEntryView.findViewById(R.id.edit_dialog_borrow_password);
-
         final  AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setIcon(R.mipmap.ic_launcher);
         builder.setTitle("Confirm");
@@ -1024,6 +1018,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int whichButton){
                 borrowHelper(book_id, edtId.getText().toString(), edtPwd.getText().toString());
                 dialogInterface.dismiss();
+            }
+        });
+        builder.setNeutralButton("SCAN", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                MainActivity.this.scanResult = book_id;
+                Intent openCameraIntent = new Intent(MainActivity.this, CaptureActivity.class);
+                startActivityForResult(openCameraIntent, 3);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
@@ -1083,6 +1085,12 @@ public class MainActivity extends AppCompatActivity {
             //retrun
             if (requestCode==2) {
                 returnDialog(data.getExtras().getString("result"));
+            }
+            //borrow conform
+            if (requestCode==3) {
+                String result = data.getExtras().getString("result");
+                int i = result.indexOf(':');
+                borrowHelper(scanResult, result.substring(0,i), result.substring(i+1));
             }
         }
     }
