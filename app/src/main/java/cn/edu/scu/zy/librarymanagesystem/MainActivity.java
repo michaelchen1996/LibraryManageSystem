@@ -112,10 +112,11 @@ public class MainActivity extends AppCompatActivity {
 
     public LinearLayout adminMenuLayout;
     public TextView adminMenuWelcomeTextView;
-    public TextView adminMenuAuditTextView;
-    public TextView adminMenuReaderManageTextView;
-    public TextView adminMenuBookManageTextView;
-    public Button adminMenuBorrowButton, adminMenuReturnButton;
+    public Button adminMenuAuditButton;
+    public Button adminMenuReaderManageButton;
+    public Button adminMenuBookManageButton;
+    public Button adminMenuBorrowButton;
+    public Button adminMenuReturnButton;
 
     public LinearLayout bookManageLayout;
 
@@ -182,9 +183,9 @@ public class MainActivity extends AppCompatActivity {
 
         adminMenuLayout = (LinearLayout) findViewById(R.id.layout_adminmenu);
         adminMenuWelcomeTextView = (TextView) findViewById(R.id.text_adminmenu_welcome);
-        adminMenuAuditTextView = (TextView) findViewById(R.id.text_adminmenu_audit);
-        adminMenuReaderManageTextView = (TextView) findViewById(R.id.text_adminmenu_readermanage);
-        adminMenuBookManageTextView = (TextView) findViewById(R.id.text_adminmenu_bookmanage);
+        adminMenuAuditButton = (Button) findViewById(R.id.button_adminmenu_audit);
+        adminMenuReaderManageButton = (Button) findViewById(R.id.button_adminmenu_readermanage);
+        adminMenuBookManageButton = (Button) findViewById(R.id.button_adminmenu_bookmanage);
         adminMenuBorrowButton = (Button) findViewById(R.id.button_adminmenu_borrow);
         adminMenuReturnButton = (Button) findViewById(R.id.button_adminmenu_return);
 
@@ -343,21 +344,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        adminMenuAuditTextView.setOnClickListener(new View.OnClickListener() {
+        adminMenuAuditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(MainActivity.this, "audit not found", Toast.LENGTH_SHORT).show();
             }
         });
 
-        adminMenuReaderManageTextView.setOnClickListener(new View.OnClickListener() {
+        adminMenuReaderManageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(MainActivity.this, "reader manage not found", Toast.LENGTH_SHORT).show();
             }
         });
 
-        adminMenuBookManageTextView.setOnClickListener(new View.OnClickListener() {
+        adminMenuBookManageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 changeView(bookManageLayout);
@@ -1016,6 +1017,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void borrowHelper(String book_id, String borrower_id, String borrower_pwd) {
         Toast.makeText(MainActivity.this, "borrow: "+book_id+" "+borrower_id+" "+borrower_pwd, Toast.LENGTH_SHORT).show();
+        //borrow
     }
 
 
@@ -1040,9 +1042,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void returnHelper(String book_id) {
-        //get bookname from internet
         Toast.makeText(MainActivity.this, "return: "+book_id, Toast.LENGTH_SHORT).show();
-
+        //return
     }
 
     @Override
