@@ -304,10 +304,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Map<String, Object> map= (HashMap<String, Object>)reservedListView.getItemAtPosition(i);
-                String book_id = (String) map.get("book_id");
-                Toast.makeText(MainActivity.this, book_id, Toast.LENGTH_SHORT).show();
                 //do cancel reserve here
-                reservedListHelper();
+                reserveCancelHelper((String) map.get("call_num"));
             }
         });
 
@@ -337,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "reserve function needs to inplement..." , Toast.LENGTH_SHORT).show();
+                reserveHelper(bookInfoCallNumberTextView.getText().toString());
             }
         });
 
@@ -594,7 +592,7 @@ public class MainActivity extends AppCompatActivity {
                         map = new HashMap<String, Object>();
                         map.put("title", item.getString("title"));
                         map.put("author", item.getString("author"));
-                        map.put("book_id", item.getString("book_id"));
+                        map.put("call_num", item.getString("call_num"));
                         map.put("date", item.getString("date"));
                         map.put("status", item.getString("status"));
                         list.add(map);
@@ -602,9 +600,9 @@ public class MainActivity extends AppCompatActivity {
                     //from instance, change listView
                     SimpleAdapter adapter = new SimpleAdapter(MainActivity.this, list,
                             R.layout.list_item_reserved,
-                            new String[]{"title", "author", "book_id", "date", "status"},
+                            new String[]{"title", "author", "call_num", "date", "status"},
                             new int[]{R.id.reserved_item_title, R.id.reserved_item_author,
-                                    R.id.reserved_item_book_id, R.id.reserved_item_date,
+                                    R.id.reserved_item_callnum, R.id.reserved_item_date,
                                     R.id.reserved_item_status});
                     reservedListView.setAdapter(adapter);
                     changeView(reservedLayout);
@@ -624,8 +622,53 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void reserveCancelHelper() {
+    public void reserveCancelHelper(final String title_id) {
         //do reserve cancel
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Cancel Reserve: "+title_id+"?");
+        builder.setTitle("Confirm");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                AsyncHttpClient client = new AsyncHttpClient();
+                RequestParams param = new RequestParams();
+                param.put("id", id);
+                param.put("pwd", pwd);
+                param.put("title_id", title_id);
+                client.post(url + "reserve_cancel.php", param, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        JSONObject resultObj = null;
+                        try {
+                            resultObj = new JSONObject(new String(responseBody));
+                            if (resultObj.getString("result").equals("true")) {
+                                reservedListHelper();
+                                Toast.makeText(MainActivity.this, "Cancel Success", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MainActivity.this, "cancel Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                    }
+                });
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
     }
 
 
@@ -697,11 +740,58 @@ public class MainActivity extends AppCompatActivity {
         bookInfoTitileTextView.setText("title");
         bookInfoAuthorTextView.setText("author");
         bookInfoIsbnTextView.setText("isbn");
-        bookInfoCallNumberTextView.setText("call_num");
+        bookInfoCallNumberTextView.setText("03333333");
         bookInfoStatusTextView.setText("status");
         bookInfoLocationTextView.setText("location");
 
         changeView(bookInfoLayout);
+    }
+
+    public void reserveHelper(final String title_id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Reserve book: "+title_id+"?");
+        builder.setTitle("Confirm");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                AsyncHttpClient client = new AsyncHttpClient();
+                RequestParams param = new RequestParams();
+                param.put("id", id);
+                param.put("pwd", pwd);
+                param.put("title_id", title_id);
+                client.post(url + "reserve.php", param, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        JSONObject resultObj = null;
+                        try {
+                            resultObj = new JSONObject(new String(responseBody));
+                            if (resultObj.getString("result").equals("true")) {
+                                bookInfoHelper(title_id);
+                                Toast.makeText(MainActivity.this, "Reserve Success", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MainActivity.this, "Reserve Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
     }
 
     public void reviewHelper(){

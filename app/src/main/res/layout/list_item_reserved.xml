@@ -32,7 +32,7 @@
             android:text="Book_id"
             android:layout_weight="1"
             android:textSize="15dp"
-            android:id="@+id/reserved_item_book_id" />
+            android:id="@+id/reserved_item_callnum" />
 
     </LinearLayout>
 
