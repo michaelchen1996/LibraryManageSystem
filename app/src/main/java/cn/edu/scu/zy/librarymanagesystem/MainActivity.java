@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     String pwd;
 
 //    String content;
-    String scanResult;
+//    String scanResult;
 
     public FrameLayout mainLayout;
     public ProgressBar progressBar;
@@ -68,13 +68,6 @@ public class MainActivity extends AppCompatActivity {
     public TextView readerMenuWelcomeTextView, readerMenuBorrowedTextView;
     public TextView readerMenuReservedTextView, readerMenuExpireTextView;
     public ImageButton readerMenuScanImageButton;
-
-    public LinearLayout adminMenuLayout;
-    public TextView adminMenuWelcomeTextView;
-    public TextView adminMenuAuditTextView;
-    public TextView adminMenuReaderManageTextView;
-    public TextView adminMenuBookManageTextView;
-    public Button adminMenuBorrowButton, adminMenuReturnButton;
 
     public LinearLayout borrowedLayout;
     public ListView borrowedListView;
@@ -117,6 +110,13 @@ public class MainActivity extends AppCompatActivity {
     public Button sechandAddButton;
     public EditText sechandEditText;
 
+    public LinearLayout adminMenuLayout;
+    public TextView adminMenuWelcomeTextView;
+    public TextView adminMenuAuditTextView;
+    public TextView adminMenuReaderManageTextView;
+    public TextView adminMenuBookManageTextView;
+    public Button adminMenuBorrowButton, adminMenuReturnButton;
+
     public LinearLayout bookManageLayout;
 
 
@@ -139,14 +139,6 @@ public class MainActivity extends AppCompatActivity {
         readerMenuReservedTextView = (TextView) findViewById(R.id.text_readermenu_reserved);
         readerMenuExpireTextView = (TextView) findViewById(R.id.text_readermenu_expire);
         readerMenuScanImageButton = (ImageButton) findViewById(R.id.imgbutton_scan);
-
-        adminMenuLayout = (LinearLayout) findViewById(R.id.layout_adminmenu);
-        adminMenuWelcomeTextView = (TextView) findViewById(R.id.text_adminmenu_welcome);
-        adminMenuAuditTextView = (TextView) findViewById(R.id.text_adminmenu_audit);
-        adminMenuReaderManageTextView = (TextView) findViewById(R.id.text_adminmenu_readermanage);
-        adminMenuBookManageTextView = (TextView) findViewById(R.id.text_adminmenu_bookmanage);
-        adminMenuBorrowButton = (Button) findViewById(R.id.button_adminmenu_borrow);
-        adminMenuReturnButton = (Button) findViewById(R.id.button_adminmenu_return);
 
         borrowedLayout = (LinearLayout) findViewById(R.id.layout_borrowed);
         borrowedListView = (ListView) findViewById(R.id.list_borrowed);
@@ -188,6 +180,14 @@ public class MainActivity extends AppCompatActivity {
         sechandAddButton = (Button) findViewById(R.id.button_sechand_add);
         sechandEditText = (EditText) findViewById(R.id.edit_sechand);
 
+        adminMenuLayout = (LinearLayout) findViewById(R.id.layout_adminmenu);
+        adminMenuWelcomeTextView = (TextView) findViewById(R.id.text_adminmenu_welcome);
+        adminMenuAuditTextView = (TextView) findViewById(R.id.text_adminmenu_audit);
+        adminMenuReaderManageTextView = (TextView) findViewById(R.id.text_adminmenu_readermanage);
+        adminMenuBookManageTextView = (TextView) findViewById(R.id.text_adminmenu_bookmanage);
+        adminMenuBorrowButton = (Button) findViewById(R.id.button_adminmenu_borrow);
+        adminMenuReturnButton = (Button) findViewById(R.id.button_adminmenu_return);
+
         bookManageLayout = (LinearLayout) findViewById(R.id.layout_book_manage);
     }
 
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //visitor login
-                borrowDialogHelper();
+                changeView(adminMenuLayout);
             }
         });
 
@@ -260,43 +260,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent openCameraIntent = new Intent(MainActivity.this, CaptureActivity.class);
                 startActivityForResult(openCameraIntent, 0);
-            }
-        });
-
-        adminMenuAuditTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        adminMenuReaderManageTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        adminMenuBookManageTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeView(bookManageLayout);
-            }
-        });
-
-        adminMenuBorrowButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent openCameraIntent = new Intent(MainActivity.this, CaptureActivity.class);
-                startActivityForResult(openCameraIntent, 1);
-            }
-        });
-
-        adminMenuReturnButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent openCameraIntent = new Intent(MainActivity.this, CaptureActivity.class);
-                startActivityForResult(openCameraIntent, 2);
             }
         });
 
@@ -377,6 +340,43 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sechandAddHelper();
+            }
+        });
+
+        adminMenuAuditTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "audit not found", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        adminMenuReaderManageTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "reader manage not found", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        adminMenuBookManageTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeView(bookManageLayout);
+            }
+        });
+
+        adminMenuBorrowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openCameraIntent = new Intent(MainActivity.this, CaptureActivity.class);
+                startActivityForResult(openCameraIntent, 1);
+            }
+        });
+
+        adminMenuReturnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openCameraIntent = new Intent(MainActivity.this, CaptureActivity.class);
+                startActivityForResult(openCameraIntent, 2);
             }
         });
 
@@ -986,34 +986,62 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void borrowDialogHelper(){
+    public void borrowDialog(final String book_id){
 
         LayoutInflater inflater = LayoutInflater.from(this);
         final View textEntryView = inflater.inflate(R.layout.layout_dialog_borrow, null);
-        final EditText edtID = (EditText) textEntryView.findViewById(R.id.edit_dialog_borrow_id);
-        final EditText edtPsw = (EditText) textEntryView.findViewById(R.id.edit_dialog_borrow_password);
+        final EditText edtId = (EditText) textEntryView.findViewById(R.id.edit_dialog_borrow_id);
+        final EditText edtPwd = (EditText) textEntryView.findViewById(R.id.edit_dialog_borrow_password);
 
         final  AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setCancelable(false);
         builder.setIcon(R.mipmap.ic_launcher);
-        builder.setTitle("User Confirm ");
+        builder.setTitle("Confirm");
+        builder.setMessage("Borrow:"+book_id);
         builder.setView(textEntryView);
-        changeView(textEntryView);
-
-        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton){
-                Toast.makeText(MainActivity.this, "id:"+edtID.getText().toString()+"psw:"+edtPsw.getText().toString(), Toast.LENGTH_SHORT).show();
-
-
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int whichButton){
+                borrowHelper(book_id, edtId.getText().toString(), edtPwd.getText().toString());
+                dialogInterface.dismiss();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(MainActivity.this, "CANCEL", Toast.LENGTH_SHORT).show();
+                dialogInterface.dismiss();
             }
         });
-        builder.show();
+        builder.create().show();
+    }
+
+
+    public void borrowHelper(String book_id, String borrower_id, String borrower_pwd) {
+        Toast.makeText(MainActivity.this, "borrow: "+book_id+" "+borrower_id+" "+borrower_pwd, Toast.LENGTH_SHORT).show();
+    }
+
+
+    public void returnDialog(final String book_id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Return book: "+book_id);
+        builder.setTitle("Confirm");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                returnHelper(book_id);
+                dialogInterface.dismiss();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+    public void returnHelper(String book_id) {
+        //get bookname from internet
+        Toast.makeText(MainActivity.this, "return: "+book_id, Toast.LENGTH_SHORT).show();
 
     }
 
@@ -1023,46 +1051,20 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             // menu scan icon
             if (requestCode==0) {
-                Bundle bundle = data.getExtras();
-                scanResult = bundle.getString("result");
-                menuSearchView.setQuery(scanResult, true);
-                Toast.makeText(MainActivity.this, "scan: " + scanResult, Toast.LENGTH_SHORT).show();
+                menuSearchView.setQuery(data.getExtras().getString("result"), true);
             }
             //borrow
             if (requestCode==1) {
-                Bundle bundle = data.getExtras();
-                scanResult = bundle.getString("result");
-                Toast.makeText(MainActivity.this, "scan: " + scanResult, Toast.LENGTH_SHORT).show();
+                borrowDialog(data.getExtras().getString("result"));
 
             }
             //retrun
             if (requestCode==2) {
-                Bundle bundle = data.getExtras();
-                scanResult = bundle.getString("result");
-                Toast.makeText(MainActivity.this, "scan: " + scanResult, Toast.LENGTH_SHORT).show();
-                //get bookname from internet
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setMessage("Return book: "+scanResult);
-                builder.setTitle("Confirm");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        //borrow
-                        Toast.makeText(MainActivity.this, "borrow: " + scanResult, Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.create().show();
+                returnDialog(data.getExtras().getString("result"));
             }
         }
     }
+
 
     public void quitDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -1083,6 +1085,7 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.create().show();
     }
+
 
     public void logoutDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
