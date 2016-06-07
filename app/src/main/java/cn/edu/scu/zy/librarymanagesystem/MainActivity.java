@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     String pwd;
 
     String scanResult;
+    Boolean isVisitor;
 
     public FrameLayout mainLayout;
     public ProgressBar progressBar;
@@ -117,7 +118,11 @@ public class MainActivity extends AppCompatActivity {
     public Button adminMenuBorrowButton;
     public Button adminMenuReturnButton;
 
+    public LinearLayout auditLayout;
+
     public LinearLayout bookManageLayout;
+
+    public LinearLayout readerManageLayout;
 
 
     private void findAllViewById() {
@@ -191,7 +196,11 @@ public class MainActivity extends AppCompatActivity {
         adminMenuBorrowButton = (Button) findViewById(R.id.button_adminmenu_borrow);
         adminMenuReturnButton = (Button) findViewById(R.id.button_adminmenu_return);
 
+        auditLayout = (LinearLayout) findViewById(R.id.layout_audit);
+
         bookManageLayout = (LinearLayout) findViewById(R.id.layout_book_manage);
+
+        readerManageLayout = (LinearLayout) findViewById(R.id.layout_reader_manage);
     }
 
 
@@ -200,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isVisitor = false;
                 loginHelper();
 
             }
@@ -208,8 +218,8 @@ public class MainActivity extends AppCompatActivity {
         visitorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //visitor
-//                changeView(adminMenuLayout);
+                isVisitor = true;
+                changeView(searchLayout);
             }
         });
 
@@ -307,7 +317,11 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View view) {
-                reserveHelper(bookInfoCallNumberTextView.getText().toString());
+                if (isVisitor) {
+                    loginWarningDialog();
+                } else {
+                    reserveHelper(bookInfoCallNumberTextView.getText().toString());
+                }
             }
         });
 
@@ -330,7 +344,11 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View view) {
-                reviewAddHelper();
+                if (isVisitor) {
+                    loginWarningDialog();
+                } else {
+                    reviewAddHelper();
+                }
             }
         });
 
@@ -338,21 +356,25 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View view) {
-                sechandAddHelper();
+                if (isVisitor) {
+                    loginWarningDialog();
+                } else {
+                    sechandAddHelper();
+                }
             }
         });
 
         adminMenuAuditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "audit not found", Toast.LENGTH_SHORT).show();
+                changeView(auditLayout);
             }
         });
 
         adminMenuReaderManageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "reader manage not found", Toast.LENGTH_SHORT).show();
+                changeView(readerManageLayout);
             }
         });
 
@@ -673,13 +695,14 @@ public class MainActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Toast.makeText(MainActivity.this, "JSON error", Toast.LENGTH_SHORT).show();
                         }
 
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        Toast.makeText(MainActivity.this, "reserve_cancel.php not exist", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -1160,6 +1183,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void loginWarningDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Warning");
+        builder.setMessage("You need to login.");
+        builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                changeView(loginLayout);
+                dialogInterface.dismiss();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+
     public void quitDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setMessage("Quit?");
@@ -1207,16 +1251,23 @@ public class MainActivity extends AppCompatActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK){
             switch (currentLayoutId) {
                 case R.id.layout_login:
-                    //exit
                     quitDialog();
                     break;
                 case R.id.layout_menu:
+                    //fall down
                 case R.id.layout_adminmenu:
                     logoutDialog();
                     break;
-                case R.id.layout_user:
                 case R.id.layout_search:
+                    if (isVisitor) {
+                        changeView(loginLayout);
+                        break;
+                    }
+                    //else fall down
+                case R.id.layout_user:
+                    //fall down
                 case R.id.layout_borrowed:
+                    //fall down
                 case R.id.layout_reserved:
                     loginHelper();
                     changeView(menuLayout);
@@ -1225,10 +1276,15 @@ public class MainActivity extends AppCompatActivity {
                     changeView(searchLayout);
                     break;
                 case R.id.layout_review:
+                    //fall down
                 case R.id.layout_sechand:
                     changeView(bookInfoLayout);
                     break;
+                case R.id.layout_audit:
+                    //fall down
                 case R.id.layout_book_manage:
+                    //fall down
+                case R.id.layout_reader_manage:
                     changeView(adminMenuLayout);
                     break;
             }

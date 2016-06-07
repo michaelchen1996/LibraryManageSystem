@@ -27,40 +27,40 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_callnum"
+        android:id="@+id/edit_book_manage_callnum"
         android:hint="call_num #"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_title"
+        android:id="@+id/edit_book_manage_title"
         android:layout_gravity="center_horizontal"
         android:hint="Title *"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_author"
+        android:id="@+id/edit_book_manage_author"
         android:layout_gravity="center_horizontal"
         android:hint="Author *"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_isbn"
+        android:id="@+id/edit_book_manage_isbn"
         android:layout_gravity="center_horizontal"
         android:hint="ISBN *"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_location"
+        android:id="@+id/edit_book_manage_location"
         android:hint="Location *"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add / INSERT"
+        android:text="Add / Update"
         android:id="@+id/button_book_manage_add"
         android:layout_gravity="center_horizontal" />
 

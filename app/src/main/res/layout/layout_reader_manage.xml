@@ -28,52 +28,52 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_id"
+        android:id="@+id/edit_reader_manage_id"
         android:hint="ID *#"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_username"
+        android:id="@+id/edit_reader_manage_username"
         android:layout_gravity="center_horizontal"
         android:hint="Username *"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_college"
+        android:id="@+id/edit_reader_manage_college"
         android:layout_gravity="center_horizontal"
         android:hint="College *"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_grade"
+        android:id="@+id/edit_reader_manage_grade"
         android:layout_gravity="center_horizontal"
         android:hint="Grade "/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_phone"
+        android:id="@+id/edit_reader_manage_phone"
         android:hint="Phone "/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_email"
+        android:id="@+id/edit_reader_manage_email"
         android:hint="E-mail "/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_manage_location"
+        android:id="@+id/edit_reader_manage_location"
         android:hint="Address "/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add / INSERT"
+        android:text="Add / Update"
         android:id="@+id/button_reader_manage_add"
         android:layout_gravity="center_horizontal" />
 
