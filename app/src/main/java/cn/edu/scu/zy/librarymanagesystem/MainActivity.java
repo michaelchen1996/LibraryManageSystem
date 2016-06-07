@@ -45,7 +45,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
 
-    public final static String url = "http://120.27.112.37/lms/";
+    public final static String url = "http://119.29.198.208/lms/";
 
     public int currentLayoutId;
     String id;
@@ -109,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
     public ListView sechandListView;
     public Button sechandAddButton;
     public EditText sechandEditText;
+
+    public LinearLayout bookManageLayout;
 
     public void findAllViewById() {
         mainLayout = (FrameLayout) findViewById(R.id.layout_main);
@@ -175,10 +177,9 @@ public class MainActivity extends AppCompatActivity {
         sechandListView = (ListView) findViewById(R.id.list_sechand);
         sechandAddButton = (Button) findViewById(R.id.button_sechand_add);
         sechandEditText = (EditText) findViewById(R.id.edit_sechand);
+
+        bookManageLayout = (LinearLayout) findViewById(R.id.layout_book_manage);
     }
-
-
-
 
 
     public void setAllListener() {
@@ -269,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
         adminMenuBookManageTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                changeView(bookManageLayout);
             }
         });
 
@@ -293,9 +294,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Map<String, Object> map= (HashMap<String, Object>)borrowedListView.getItemAtPosition(i);
-                String book_id = (String) map.get("book_id");
-                Toast.makeText(MainActivity.this, book_id, Toast.LENGTH_SHORT).show();
                 //do renew here
+                renewHelper((String) map.get("book_id"));
+
             }
         });
 
@@ -431,6 +432,8 @@ public class MainActivity extends AppCompatActivity {
                         //set admin info
                         adminMenuWelcomeTextView.setText("Hello, admin: "+usrName);
                         changeView(adminMenuLayout);
+                    } else {
+                        Toast.makeText(MainActivity.this, "Wrong id/pwd", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -514,6 +517,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void renewHelper(final String book_id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Renew book: "+book_id+"?");
+        builder.setTitle("Confirm");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                AsyncHttpClient client = new AsyncHttpClient();
+                RequestParams param = new RequestParams();
+                param.put("id", id);
+                param.put("pwd", pwd);
+                param.put("book_id", book_id);
+                client.post(url + "renew.php", param, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        JSONObject resultObj = null;
+                        try {
+                            resultObj = new JSONObject(new String(responseBody));
+                            if (resultObj.getString("result").equals("true")) {
+                                borrowedListHelper();
+                                Toast.makeText(MainActivity.this, "Renew Success", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MainActivity.this, "Renew Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
+
+
+    }
+
+
     public void reservedListHelper() {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams param = new RequestParams();
@@ -568,6 +621,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+
+    public void reserveCancelHelper() {
+        //do reserve cancel
     }
 
 
@@ -696,19 +754,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void reviewAddHelper(){
         String content = reviewEditText.getText().toString();
-
+//insert
+        reviewHelper();
         Toast.makeText(MainActivity.this, "what you bb : " + content, Toast.LENGTH_SHORT).show();
 
     }
 
     public void sechandAddHelper(){
         String content = sechandEditText.getText().toString();
-
+//insert
+        sechandHelper();
         Toast.makeText(MainActivity.this, "what you bb : " + content, Toast.LENGTH_SHORT).show();
     }
 
     public void borrowDialogHelper(){
-
 
         LayoutInflater inflater = LayoutInflater.from(this);
         final View textEntryView = inflater.inflate(R.layout.layout_dialog_borrow, null);
@@ -718,7 +777,7 @@ public class MainActivity extends AppCompatActivity {
         final  AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setCancelable(false);
         builder.setIcon(R.mipmap.ic_launcher);
-        builder.setTitle("Title");
+        builder.setTitle("User Confirm ");
         builder.setView(textEntryView);
         changeView(textEntryView);
 
@@ -786,6 +845,46 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void quitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Quit?");
+        builder.setTitle("Confirm");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                MainActivity.this.finish();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+    public void logoutDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Logout?");
+        builder.setTitle("Confirm");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                changeView(loginLayout);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -793,49 +892,12 @@ public class MainActivity extends AppCompatActivity {
             switch (currentLayoutId) {
                 case R.id.layout_login:
                     //exit
-//                    return super.onKeyDown(keyCode, event);
-                {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setMessage("Quit?");
-                    builder.setTitle("Confirm");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                            MainActivity.this.finish();
-                        }
-                    });
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    });
-                    builder.create().show();
+                    quitDialog();
                     break;
-                }
                 case R.id.layout_menu:
                 case R.id.layout_adminmenu:
-                {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setMessage("Logout?");
-                    builder.setTitle("Confirm");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                            changeView(loginLayout);
-                        }
-                    });
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    });
-                    builder.create().show();
+                    logoutDialog();
                     break;
-                }
                 case R.id.layout_user:
                 case R.id.layout_search:
                 case R.id.layout_borrowed:
@@ -849,6 +911,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.layout_review:
                 case R.id.layout_sechand:
                     changeView(bookInfoLayout);
+                    break;
+                case R.id.layout_book_manage:
+                    changeView(adminMenuLayout);
                     break;
             }
         }

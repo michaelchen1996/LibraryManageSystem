@@ -3,7 +3,8 @@
     android:id="@+id/layout_book_manage"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:visibility="gone">
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,40 +27,40 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/edit_manage_callnum"
         android:hint="call_num #"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
+        android:id="@+id/edit_manage_title"
         android:layout_gravity="center_horizontal"
         android:hint="Title *"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText3"
+        android:id="@+id/edit_manage_author"
         android:layout_gravity="center_horizontal"
         android:hint="Author *"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText4"
+        android:id="@+id/edit_manage_isbn"
         android:layout_gravity="center_horizontal"
         android:hint="ISBN *"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText5"
+        android:id="@+id/edit_manage_location"
         android:hint="Location *"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add"
+        android:text="Add / INSERT"
         android:id="@+id/button"
         android:layout_gravity="center_horizontal" />
 

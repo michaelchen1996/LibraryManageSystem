@@ -17,6 +17,7 @@
     <include layout="@layout/layout_review" />
     <include layout="@layout/layout_sechand"/>
     <include layout="@layout/layout_dialog_borrow"/>
+    <include layout="@layout/layout_book_manage" />
 
 
 
