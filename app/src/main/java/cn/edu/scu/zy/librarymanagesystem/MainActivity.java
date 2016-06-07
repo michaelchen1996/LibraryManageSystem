@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 //import android.support.v7.app.AlertDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -27,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.loopj.android.http.*;
 import com.xys.libzxing.zxing.activity.CaptureActivity;
+import com.xys.libzxing.zxing.encoding.EncodingUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     public TextView userGradeTextView;
     public TextView userAddressTextView;
     public TextView userEmailTextView;
+    public ImageView userQrImageView;
 
     public LinearLayout bookInfoLayout;
     public TextView bookInfoTitileTextView;
@@ -159,11 +164,13 @@ public class MainActivity extends AppCompatActivity {
         userPhoneTextView = (TextView) findViewById(R.id.text_user_phone);
         userAddressTextView = (TextView) findViewById(R.id.text_user_address);
         userEmailTextView = (TextView) findViewById(R.id.text_user_email);
+        userQrImageView = (ImageView) findViewById(R.id.image_user_qr);
 
         bookInfoLayout = (LinearLayout) findViewById(R.id.layout_bookinfo);
         bookInfoTitileTextView = (TextView) findViewById(R.id.text_bookinfo_title);
         bookInfoAuthorTextView = (TextView) findViewById(R.id.text_bookinfo_author);
         bookInfoIsbnTextView = (TextView) findViewById(R.id.text_bookinfo_isbn);
+        bookInfoYearTextView = (TextView) findViewById(R.id.text_bookinfo_year);
         bookInfoCallNumberTextView = (TextView) findViewById(R.id.text_bookinfo_callnum);
         bookInfoStatusTextView = (TextView) findViewById(R.id.text_bookinfo_status);
         bookInfoAbstractTextView = (TextView) findViewById(R.id.text_bookinfo_abstract);
@@ -421,7 +428,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
 
                 //recieved info from server
                 try {
@@ -436,6 +443,13 @@ public class MainActivity extends AppCompatActivity {
                         readerMenuBorrowedTextView.setText("Borrowed(" + String.valueOf(borrowedBookAmount) + ")");
                         readerMenuReservedTextView.setText("Reserved(" + String.valueOf(reservedBookAmount) + ")");
                         readerMenuExpireTextView.setText("Expire-date(" + String.valueOf(expireAmount) + ")");
+                        //make a QR image in info page
+                        String contentString = id + pwd;
+                        if (!contentString.equals("")) {
+                            Bitmap qrCodeBitmap = EncodingUtils.createQRCode(contentString, 350, 350,
+                                    BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+                            userQrImageView.setImageBitmap(qrCodeBitmap);
+                        }
                         changeView(menuLayout);
                     } else if (resultObj.getString("user_type").equals("admin")) {
                         //set admin info
@@ -458,6 +472,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     public void userHelper(){
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams param = new RequestParams();
@@ -467,13 +482,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
-                    JSONObject resultObj = new JSONObject(responseBody.toString());
+                    JSONObject resultObj = new JSONObject(new String(responseBody));
                     userNameTextView.setText(resultObj.getString("name"));
                     userIdTextView.setText(resultObj.getString("id"));
                     userCollegeTextView.setText(resultObj.getString("college"));
                     userGradeTextView.setText(resultObj.getString("grade"));
                     userPhoneTextView.setText(resultObj.getString("phone"));
-                    userAddressTextView.setText(resultObj.getString("address"));
+//                    userAddressTextView.setText(resultObj.getString("address"));
+                    userAddressTextView.setText("");
                     userEmailTextView.setText(resultObj.getString("email"));
                     changeView(userLayout);
                 } catch (JSONException e) {
@@ -484,10 +500,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                Toast.makeText(MainActivity.this, "error "+String.valueOf(statusCode), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     public void borrowedListHelper() {
         AsyncHttpClient client = new AsyncHttpClient();
@@ -766,20 +783,20 @@ public class MainActivity extends AppCompatActivity {
     public void bookInfoHelper(String call_num) {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams param = new RequestParams();
-//        param.put("id", id);
-//        param.put("pwd", pwd);
         param.put("title_id", call_num);
         client.post(url + "book_info.php", param, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
-                    JSONObject resultObj = new JSONObject(responseBody.toString());
+//                    Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
+                    JSONObject resultObj = new JSONObject(new String(responseBody));
                     bookInfoTitileTextView.setText(resultObj.getString("title"));
                     bookInfoAuthorTextView.setText(resultObj.getString("author"));
                     bookInfoIsbnTextView.setText(resultObj.getString("isbn"));
-                    bookInfoCallNumberTextView.setText(resultObj.getString("title_id"));
+                    bookInfoCallNumberTextView.setText(resultObj.getString("id"));
                     bookInfoYearTextView.setText(resultObj.getString("year"));
-                    bookInfoStatusTextView.setText(resultObj.getString("status"));
+//                    bookInfoStatusTextView.setText(resultObj.getString("status"));
+                    bookInfoStatusTextView.setText("");
                     bookInfoAbstractTextView.setText(resultObj.getString("abstract"));
                     changeView(bookInfoLayout);
                 } catch (JSONException e) {
@@ -852,7 +869,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
-                    JSONArray resultArray = new JSONArray(responseBody.toString());
+                    Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
+                    JSONArray resultArray = new JSONArray(new String(responseBody));
                     List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
                     Map<String, Object> map;
                     for (int i=0; i < resultArray.length(); i++) {
@@ -874,6 +892,7 @@ public class MainActivity extends AppCompatActivity {
                     changeView(reviewLayout);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "JSON error", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -882,6 +901,39 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }) ;
+    }
+
+
+    public void reviewAddHelper(){
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams param = new RequestParams();
+        param.put("id", id);
+        param.put("pwd", pwd);
+        param.put("title_id", bookInfoCallNumberTextView.getText().toString());
+        param.put("content", reviewEditText.getText().toString());
+        client.post(url + "review_add.php", param, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    reviewEditText.setText("");
+                    JSONObject resultObj = new JSONObject(new String(responseBody));
+                    if (resultObj.getString("result").equals("true")) {
+                        reviewEditText.clearComposingText();
+                        reviewHelper();
+                        Toast.makeText(MainActivity.this, "Review Success", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Review Failed", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
     }
 
 
@@ -922,37 +974,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "sechand.php not found", Toast.LENGTH_SHORT).show();
             }
         }) ;
-    }
-
-
-    public void reviewAddHelper(){
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams param = new RequestParams();
-        param.put("id", id);
-        param.put("pwd", pwd);
-        param.put("title_id", bookInfoCallNumberTextView.getText().toString());
-        param.put("content", reviewEditText.getText().toString());
-        client.post(url + "review_add.php", param, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try {
-                    JSONObject resultObj = new JSONObject(responseBody.toString());
-                    if (resultObj.getString("result").equals("true")) {
-                        reviewHelper();
-                        Toast.makeText(MainActivity.this, "Review Success", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(MainActivity.this, "Review Failed", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-            }
-        });
     }
 
 
