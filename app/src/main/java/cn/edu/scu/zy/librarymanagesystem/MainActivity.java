@@ -386,11 +386,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     public void changeView(View view){
         findViewById(currentLayoutId).setVisibility(View.GONE);
         view.setVisibility(View.VISIBLE);
         currentLayoutId = view.getId();
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1041,6 +1043,34 @@ public class MainActivity extends AppCompatActivity {
     public void borrowHelper(String book_id, String borrower_id, String borrower_pwd) {
         Toast.makeText(MainActivity.this, "borrow: "+book_id+" "+borrower_id+" "+borrower_pwd, Toast.LENGTH_SHORT).show();
         //borrow
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams param = new RequestParams();
+        param.put("id", id);
+        param.put("pwd", pwd);
+        param.put("borrower_id", borrower_id);
+        param.put("borrower_pwd", borrower_pwd);
+        param.put("book_id", book_id);
+        client.post(url + "borrow.php", param, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    JSONObject resultObj = new JSONObject(new String(responseBody));
+                    if (resultObj.getString("result").equals("true")) {
+                        reviewHelper();
+                        Toast.makeText(MainActivity.this, "Borrow Success", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Borrow Failed", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
     }
 
 
@@ -1067,6 +1097,33 @@ public class MainActivity extends AppCompatActivity {
     public void returnHelper(String book_id) {
         Toast.makeText(MainActivity.this, "return: "+book_id, Toast.LENGTH_SHORT).show();
         //return
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams param = new RequestParams();
+        param.put("id", id);
+        param.put("pwd", pwd);
+        param.put("book_id", book_id);
+        client.post(url + "return.php", param, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    JSONObject resultObj = new JSONObject(new String(responseBody));
+                    if (resultObj.getString("result").equals("true")) {
+                        reviewHelper();
+                        Toast.makeText(MainActivity.this, "Return Success", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Return Failed", Toast.LENGTH_SHORT).show();
+                    }
+                    //judge reserved
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
     }
 
     @Override
