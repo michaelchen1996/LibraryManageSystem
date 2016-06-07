@@ -14,7 +14,7 @@
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:textSize="30dp"
-        android:id="@+id/show_title" />
+        android:id="@+id/text_bookinfo_title" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -63,7 +63,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:text="call_num:"
+                android:text="Call Num:"
+                android:gravity="right"
+                android:textSize="20dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="Year:"
                 android:gravity="right"
                 android:textSize="20dp"
                 />
@@ -79,7 +87,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:text="Location:"
+                android:text="Abstract:"
                 android:gravity="right"
                 android:textSize="20dp"
                  />
@@ -96,36 +104,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:textSize="20dp"
-                android:id="@+id/show_author"
+                android:id="@+id/text_bookinfo_author"
                 android:text="Author" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:textSize="20dp"
-                android:id="@+id/show_isbn"
-                android:text="ISBN" />
+                android:id="@+id/text_bookinfo_isbn"
+                android:text="1234567890123" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:textSize="20dp"
-                android:id="@+id/show_num"
-                android:text="ISBN" />
+                android:id="@+id/text_bookinfo_callnum"
+                android:text="call_num" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:textSize="20dp"
-                android:id="@+id/show_status"
-                android:text="ISBN" />
+                android:id="@+id/text_bookinfo_year"
+                android:text="2015" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:textSize="20dp"
-                android:id="@+id/show_location"
-                android:text="ISBN" />
+                android:id="@+id/text_bookinfo_status"
+                android:text="this is status" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:textSize="20dp"
+                android:id="@+id/text_bookinfo_abstract"
+                android:text="abstract" />
         </LinearLayout>
 
     </LinearLayout>

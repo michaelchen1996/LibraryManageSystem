@@ -90,12 +90,19 @@ public class MainActivity extends AppCompatActivity {
     public TextView userNameTextView;
     public TextView userIdTextView;
     public TextView userPhoneTextView;
+    public TextView userCollegeTextView;
+    public TextView userGradeTextView;
     public TextView userAddressTextView;
     public TextView userEmailTextView;
 
     public LinearLayout bookInfoLayout;
-    public TextView bookInfoTitileTextView, bookInfoAuthorTextView, bookInfoCallNumberTextView;
-    public TextView bookInfoIsbnTextView, bookInfoStatusTextView, bookInfoLocationTextView;
+    public TextView bookInfoTitileTextView;
+    public TextView bookInfoAuthorTextView;
+    public TextView bookInfoCallNumberTextView;
+    public TextView bookInfoIsbnTextView;
+    public TextView bookInfoYearTextView;
+    public TextView bookInfoStatusTextView;
+    public TextView bookInfoAbstractTextView;
     public Button bookInfoReserveButton;
     public Button bookInfoReviewButton;
     public Button bookInfoSechandButton;
@@ -111,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
     public EditText sechandEditText;
 
     public LinearLayout bookManageLayout;
+
 
     private void findAllViewById() {
         mainLayout = (FrameLayout) findViewById(R.id.layout_main);
@@ -153,17 +161,19 @@ public class MainActivity extends AppCompatActivity {
         userLayout = (LinearLayout) findViewById(R.id.layout_user);
         userNameTextView = (TextView) findViewById(R.id.text_user_name);
         userIdTextView = (TextView) findViewById(R.id.text_user_id);
+        userCollegeTextView = (TextView) findViewById(R.id.text_user_college);
+        userGradeTextView = (TextView) findViewById(R.id.text_user_phone);
         userPhoneTextView = (TextView) findViewById(R.id.text_user_phone);
         userAddressTextView = (TextView) findViewById(R.id.text_user_address);
         userEmailTextView = (TextView) findViewById(R.id.text_user_email);
 
         bookInfoLayout = (LinearLayout) findViewById(R.id.layout_bookinfo);
-        bookInfoTitileTextView = (TextView) findViewById(R.id.show_title);
-        bookInfoAuthorTextView = (TextView) findViewById(R.id.show_author);
-        bookInfoIsbnTextView = (TextView) findViewById(R.id.show_isbn);
-        bookInfoCallNumberTextView = (TextView) findViewById(R.id.show_num);
-        bookInfoStatusTextView = (TextView) findViewById(R.id.show_status);
-        bookInfoLocationTextView = (TextView) findViewById(R.id.show_location);
+        bookInfoTitileTextView = (TextView) findViewById(R.id.text_bookinfo_title);
+        bookInfoAuthorTextView = (TextView) findViewById(R.id.text_bookinfo_author);
+        bookInfoIsbnTextView = (TextView) findViewById(R.id.text_bookinfo_isbn);
+        bookInfoCallNumberTextView = (TextView) findViewById(R.id.text_bookinfo_callnum);
+        bookInfoStatusTextView = (TextView) findViewById(R.id.text_bookinfo_status);
+        bookInfoAbstractTextView = (TextView) findViewById(R.id.text_bookinfo_abstract);
         bookInfoReserveButton = (Button) findViewById(R.id.show_button_reserve);
         bookInfoReviewButton = (Button) findViewById(R.id.show_button_review);
         bookInfoSechandButton = (Button) findViewById(R.id.show_button_sechand);
@@ -448,14 +458,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void userHelper(){
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams param = new RequestParams();
+        param.put("id", id);
+        param.put("pwd", pwd);
+        client.post(url + "user_info.php", param, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    JSONObject resultObj = new JSONObject(responseBody.toString());
+                    userNameTextView.setText(resultObj.getString("name"));
+                    userIdTextView.setText(resultObj.getString("id"));
+                    userCollegeTextView.setText(resultObj.getString("college"));
+                    userGradeTextView.setText(resultObj.getString("grade"));
+                    userPhoneTextView.setText(resultObj.getString("phone"));
+                    userAddressTextView.setText(resultObj.getString("address"));
+                    userEmailTextView.setText(resultObj.getString("email"));
+                    changeView(userLayout);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "JSON error", Toast.LENGTH_SHORT).show();
+                }
+            }
 
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
-        userNameTextView.setText("Park");
-        userIdTextView.setText("2014141463007");
-        userPhoneTextView.setText("13223332333");
-        userAddressTextView.setText("7th block");
-        userEmailTextView.setText("233@gmail.com");
-        changeView(userLayout);
+            }
+        });
     }
 
     public void borrowedListHelper() {
@@ -733,19 +763,37 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void bookInfoHelper(String call_num) {
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams param = new RequestParams();
+//        param.put("id", id);
+//        param.put("pwd", pwd);
+        param.put("title_id", call_num);
+        client.post(url + "book_info.php", param, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    JSONObject resultObj = new JSONObject(responseBody.toString());
+                    bookInfoTitileTextView.setText(resultObj.getString("title"));
+                    bookInfoAuthorTextView.setText(resultObj.getString("author"));
+                    bookInfoIsbnTextView.setText(resultObj.getString("isbn"));
+                    bookInfoCallNumberTextView.setText(resultObj.getString("title_id"));
+                    bookInfoYearTextView.setText(resultObj.getString("year"));
+                    bookInfoStatusTextView.setText(resultObj.getString("status"));
+                    bookInfoAbstractTextView.setText(resultObj.getString("abstract"));
+                    changeView(bookInfoLayout);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "JSON error", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-        Toast.makeText(MainActivity.this, "this is the book: " + call_num, Toast.LENGTH_SHORT).show();
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
-
-        bookInfoTitileTextView.setText("title");
-        bookInfoAuthorTextView.setText("author");
-        bookInfoIsbnTextView.setText("isbn");
-        bookInfoCallNumberTextView.setText("03333333");
-        bookInfoStatusTextView.setText("status");
-        bookInfoLocationTextView.setText("location");
-
-        changeView(bookInfoLayout);
+            }
+        });
     }
+
 
     public void reserveHelper(final String title_id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -794,68 +842,149 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+
     public void reviewHelper(){
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams param = new RequestParams();
+        param.put("title_id", bookInfoCallNumberTextView.getText().toString());
+        client.post(url + "review.php", param, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    JSONArray resultArray = new JSONArray(responseBody.toString());
+                    List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+                    Map<String, Object> map;
+                    for (int i=0; i < resultArray.length(); i++) {
+                        JSONObject item = new JSONObject(resultArray.getString(i));
+                        map = new HashMap<String, Object>();
+                        map.put("username", item.getString("username"));
+                        map.put("mark", item.getString("mark"));
+                        map.put("content", item.getString("content"));
+                        map.put("time", item.getString("time"));
+                        list.add(map);
+                    }
+                    //from instance, change listView
+                    SimpleAdapter adapter = new SimpleAdapter(MainActivity.this, list,
+                            R.layout.list_item_review,
+                            new String[]{"username", "mark", "content", "time"},
+                            new int[]{R.id.review_item_username, R.id.review_item_mark,
+                                    R.id.review_item_content, R.id.review_item_time});
+                    reviewListView.setAdapter(adapter);
+                    changeView(reviewLayout);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
-//        JSONArray resultArray = new JSONArray(new String(responseBody));
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        Map<String, Object> map;
-//                    for (int i=0; i < resultArray.length(); i++) {
-//                        JSONObject item = new JSONObject(resultArray.getString(i));
-        map = new HashMap<String, Object>();
-        map.put("username", "username:");
-        map.put("mark", "mark");
-        map.put("content", "blablabla...");
-        list.add(map);
-
-
-        //from instance, change listView
-        SimpleAdapter adapter = new SimpleAdapter(MainActivity.this, list,
-                R.layout.list_item_review,
-                new String[]{"username", "mark", "content"},
-                new int[]{R.id.review_item_username, R.id.review_item_mark,
-                        R.id.review_item_content});
-        reviewListView.setAdapter(adapter);
-        changeView(reviewLayout);
-
-
+            }
+        }) ;
     }
+
 
     public void sechandHelper(){
-        //        JSONArray resultArray = new JSONArray(new String(responseBody));
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        Map<String, Object> map;
-//                    for (int i=0; i < resultArray.length(); i++) {
-//                        JSONObject item = new JSONObject(resultArray.getString(i));
-        map = new HashMap<String, Object>();
-        map.put("username", "Park");
-        map.put("content", "I'm sechand info...");
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams param = new RequestParams();
+        param.put("title_id", bookInfoCallNumberTextView.getText().toString());
+        client.post(url + "sechand.php", param, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    JSONArray resultArray = new JSONArray(responseBody.toString());
+                    List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+                    Map<String, Object> map;
+                    for (int i=0; i < resultArray.length(); i++) {
+                        JSONObject item = new JSONObject(resultArray.getString(i));
+                        map = new HashMap<String, Object>();
+                        map.put("username", item.getString("username"));
+                        map.put("content", item.getString("content"));
+                        map.put("time", item.getString("time"));
+                        list.add(map);
+                    }
+                    //from instance, change listView
+                    SimpleAdapter adapter = new SimpleAdapter(MainActivity.this, list,
+                            R.layout.list_item_sechand,
+                            new String[]{"username", "content", "time"},
+                            new int[]{R.id.sechand_item_username, R.id.sechand_item_content,
+                                    R.id.sechand_item_time});
+                    sechandListView.setAdapter(adapter);
+                    changeView(sechandLayout);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
-        list.add(map);
-
-        //from instance, change listView
-        SimpleAdapter adapter = new SimpleAdapter(MainActivity.this, list,
-                R.layout.list_item_sechand,
-                new String[]{"username", "content"},
-                new int[]{R.id.sechand_item_username, R.id.sechand_item_content});
-        sechandListView.setAdapter(adapter);
-        changeView(sechandLayout);
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(MainActivity.this, "sechand.php not found", Toast.LENGTH_SHORT).show();
+            }
+        }) ;
     }
+
 
     public void reviewAddHelper(){
-        String content = reviewEditText.getText().toString();
-//insert
-        reviewHelper();
-        Toast.makeText(MainActivity.this, "what you bb : " + content, Toast.LENGTH_SHORT).show();
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams param = new RequestParams();
+        param.put("id", id);
+        param.put("pwd", pwd);
+        param.put("title_id", bookInfoCallNumberTextView.getText().toString());
+        param.put("content", reviewEditText.getText().toString());
+        client.post(url + "review_add.php", param, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    JSONObject resultObj = new JSONObject(responseBody.toString());
+                    if (resultObj.getString("result").equals("true")) {
+                        reviewHelper();
+                        Toast.makeText(MainActivity.this, "Review Success", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Review Failed", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
     }
+
 
     public void sechandAddHelper(){
-        String content = sechandEditText.getText().toString();
-//insert
-        sechandHelper();
-        Toast.makeText(MainActivity.this, "what you bb : " + content, Toast.LENGTH_SHORT).show();
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams param = new RequestParams();
+        param.put("id", id);
+        param.put("pwd", pwd);
+        param.put("title_id", bookInfoCallNumberTextView.getText().toString());
+        param.put("content", sechandEditText.getText().toString());
+        client.post(url + "sechand_add.php", param, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try {
+                    JSONObject resultObj = new JSONObject(responseBody.toString());
+                    if (resultObj.getString("result").equals("true")) {
+                        reviewHelper();
+                        Toast.makeText(MainActivity.this, "Publish Success", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Publish Failed", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(MainActivity.this, "sechand_add.php not found", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 
     public void borrowDialogHelper(){
 
