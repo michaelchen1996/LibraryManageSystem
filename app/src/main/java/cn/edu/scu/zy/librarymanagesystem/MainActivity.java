@@ -3,7 +3,6 @@ package cn.edu.scu.zy.librarymanagesystem;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-//import android.support.v7.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -51,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
     String id;
     String pwd;
 
-//    String content;
     String scanResult;
 
     public FrameLayout mainLayout;
@@ -123,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void findAllViewById() {
+
         mainLayout = (FrameLayout) findViewById(R.id.layout_main);
         progressBar = (ProgressBar) findViewById(R.id.progerss_bar);
 
@@ -209,8 +208,8 @@ public class MainActivity extends AppCompatActivity {
         visitorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//visitor login
-                changeView(adminMenuLayout);
+                //visitor
+//                changeView(adminMenuLayout);
             }
         });
 
@@ -232,8 +231,6 @@ public class MainActivity extends AppCompatActivity {
         readerMenuWelcomeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//user info show page
-                Toast.makeText(MainActivity.this, "user info", Toast.LENGTH_SHORT).show();
                 userHelper();
             }
         });
@@ -271,7 +268,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Map<String, Object> map= (HashMap<String, Object>)borrowedListView.getItemAtPosition(i);
-                //do renew here
                 renewHelper((String) map.get("book_id"));
 
             }
@@ -281,7 +277,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Map<String, Object> map= (HashMap<String, Object>)reservedListView.getItemAtPosition(i);
-                //do cancel reserve here
                 reserveCancelHelper((String) map.get("call_num"));
             }
         });
@@ -418,16 +413,10 @@ public class MainActivity extends AppCompatActivity {
         param.put("id", id);
         param.put("pwd", pwd);
         client.post(url + "login.php", param, new AsyncHttpResponseHandler() {
-            @Override
-            public void onStart() {
-                super.onStart();
-//                Toast.makeText(MainActivity.this, "connect...plz wait", Toast.LENGTH_SHORT).show();
-            }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 //                Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
-
                 //recieved info from server
                 try {
                     JSONObject resultObj = new JSONObject(new String(responseBody));
@@ -510,16 +499,10 @@ public class MainActivity extends AppCompatActivity {
         param.put("id", id);
         param.put("pwd", pwd);
         client.post(url + "borrowed.php", param, new AsyncHttpResponseHandler() {
-            @Override
-            public void onStart() {
-                super.onStart();
-                Toast.makeText(MainActivity.this, "connect...plz wait", Toast.LENGTH_SHORT).show();
-            }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
-
+//                Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
                 //recieved info from server
                 try {
                     JSONArray resultArray = new JSONArray(new String(responseBody));
@@ -617,16 +600,10 @@ public class MainActivity extends AppCompatActivity {
         param.put("id", id);
         param.put("pwd", pwd);
         client.post(url + "reserved.php", param, new AsyncHttpResponseHandler() {
-            @Override
-            public void onStart() {
-                super.onStart();
-                Toast.makeText(MainActivity.this, "connect...plz wait", Toast.LENGTH_SHORT).show();
-            }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
-
+//                Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
                 //recieved info from server
                 try {
                     JSONArray resultArray = new JSONArray(new String(responseBody));
@@ -719,24 +696,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void searchHelper(String s) {
-        Toast.makeText(MainActivity.this, "search: " + s, Toast.LENGTH_SHORT).show();
-        //send query
-        //list in search layout
-        //change layout
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams param = new RequestParams();
         param.put("query", s);
         client.post(url + "search.php", param, new AsyncHttpResponseHandler() {
-            @Override
-            public void onStart() {
-                super.onStart();
-                Toast.makeText(MainActivity.this, "connect...plz wait", Toast.LENGTH_SHORT).show();
-            }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
-
+//                Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
                 //recieved info from server
                 try {
                     JSONArray resultArray = new JSONArray(new String(responseBody));
@@ -786,7 +753,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
-                    Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
                     JSONObject resultObj = new JSONObject(new String(responseBody));
                     bookInfoTitileTextView.setText(resultObj.getString("title"));
                     bookInfoAuthorTextView.setText(resultObj.getString("author"));
@@ -804,7 +771,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -843,7 +810,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                        Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -866,7 +833,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
-                    Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
                     JSONArray resultArray = new JSONArray(new String(responseBody));
                     List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
                     Map<String, Object> map;
@@ -895,7 +862,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
             }
         }) ;
     }
@@ -922,12 +889,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "JSON error", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -962,6 +930,7 @@ public class MainActivity extends AppCompatActivity {
                     changeView(sechandLayout);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "JSON error", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -994,6 +963,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "JSON error", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1041,7 +1011,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void borrowHelper(String book_id, String borrower_id, String borrower_pwd) {
-        Toast.makeText(MainActivity.this, "borrow: "+book_id+" "+borrower_id+" "+borrower_pwd, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MainActivity.this, "borrow: "+book_id+" "+borrower_id+" "+borrower_pwd, Toast.LENGTH_SHORT).show();
         //borrow
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams param = new RequestParams();
@@ -1054,21 +1024,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
+//                    Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
                     JSONObject resultObj = new JSONObject(new String(responseBody));
                     if (resultObj.getString("result").equals("true")) {
-                        reviewHelper();
                         Toast.makeText(MainActivity.this, "Borrow Success", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(MainActivity.this, "Borrow Failed", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "JSON error", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -1094,8 +1065,37 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+
+    public void expireWarningDialog(String expire_msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Warning");
+        builder.setMessage(expire_msg);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+
+    public void reserveWarningDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Warning");
+        builder.setMessage("This book has been reserved.");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+
     public void returnHelper(String book_id) {
-        Toast.makeText(MainActivity.this, "return: "+book_id, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MainActivity.this, "return: "+book_id, Toast.LENGTH_SHORT).show();
         //return
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams param = new RequestParams();
@@ -1106,22 +1106,29 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
+//                    Toast.makeText(MainActivity.this, new String(responseBody), Toast.LENGTH_SHORT).show();
                     JSONObject resultObj = new JSONObject(new String(responseBody));
                     if (resultObj.getString("result").equals("true")) {
-                        reviewHelper();
                         Toast.makeText(MainActivity.this, "Return Success", Toast.LENGTH_SHORT).show();
+                        if (!resultObj.getString("expire").equals("false")) {
+                            expireWarningDialog(resultObj.getString("expire"));
+                        }
+                        if (!resultObj.getString("reserve").equals("false")) {
+                            reserveWarningDialog();
+                        }
                     } else {
                         Toast.makeText(MainActivity.this, "Return Failed", Toast.LENGTH_SHORT).show();
                     }
                     //judge reserved
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "JSON error", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
             }
         });
     }
