@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
     public LinearLayout bookManageLayout;
 
-    public void findAllViewById() {
+    private void findAllViewById() {
         mainLayout = (FrameLayout) findViewById(R.id.layout_main);
         progressBar = (ProgressBar) findViewById(R.id.progerss_bar);
 
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void setAllListener() {
+    private void setAllListener() {
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -656,7 +656,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                        Toast.makeText(MainActivity.this, "reserve_cancel.php not exist", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
