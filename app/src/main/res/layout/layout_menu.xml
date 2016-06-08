@@ -30,23 +30,28 @@
 
     <TextView
         android:id="@+id/text_readermenu_welcome"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="32sp"
+        android:text="Hello name"
         />
+
+
 
     <TextView
         android:id="@+id/text_readermenu_borrowed"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="30sp"
+        android:text="Borrowed(0)"
         />
 
     <TextView
         android:id="@+id/text_readermenu_reserved"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="30sp"
+        android:text="Reserved(0)"
         />
 
     <TextView
@@ -54,6 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="30sp"
+        android:visibility="gone"
         />
 
 </LinearLayout>

@@ -14,15 +14,15 @@
         android:layout_width="113dp"
         android:layout_height="match_parent"
         android:gravity="right"
-        android:layout_weight="0.91">
+        android:layout_weight="2.75">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Audi"
-            android:textSize="25dp"
-            android:layout_gravity="right"
-            android:textColor="#354ca7" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Audit Information"-->
+            <!--android:textSize="25dp"-->
+            <!--android:layout_gravity="right"-->
+            <!--android:textColor="#354ca7" />-->
 
         <TextView
             android:layout_width="wrap_content"
@@ -68,17 +68,16 @@
         android:layout_height="match_parent"
         android:layout_weight="0.61">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="t Information"
-            android:textSize="25dp"
-            android:textColor="#354ca7" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textSize="25dp"-->
+            <!--android:textColor="#354ca7" />-->
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reader amount"
+            android:text="2"
             android:textSize="20dp"
             android:id="@+id/user_username"
             />
@@ -86,7 +85,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Book amount"
+            android:text="11"
             android:textSize="20dp"
             android:id="@+id/user_id"
             />
@@ -94,7 +93,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="On the shelf"
+            android:text="11"
             android:textSize="20dp"
             android:id="@+id/user_phone"
             />
@@ -102,7 +101,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Library address"
+            android:text="SCU"
             android:textSize="20dp"
             android:id="@+id/user_address"
             />

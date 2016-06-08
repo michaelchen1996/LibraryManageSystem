@@ -6,11 +6,26 @@
     android:layout_height="match_parent"
     android:visibility="gone">
 
-    <SearchView
-        android:id="@+id/search_search"
-        android:layout_width="fill_parent"
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:iconifiedByDefault="false"/>
+        android:orientation="horizontal">
+
+        <SearchView
+            android:id="@+id/search_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:iconifiedByDefault="false"/>
+
+        <ImageButton
+            android:id="@+id/imgbutton_search_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_menu_camera"/>
+
+    </LinearLayout>
 
     <ListView
         android:id="@+id/list_search"

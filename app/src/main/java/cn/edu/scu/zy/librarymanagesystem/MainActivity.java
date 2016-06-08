@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     public LinearLayout searchLayout;
     public SearchView searchSearchView;
+    public ImageButton searchSearchScanImageButton;
     public ListView searchListView;
 
     public LinearLayout userLayout;
@@ -154,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
         searchLayout = (LinearLayout) findViewById(R.id.layout_search);
         searchSearchView = (SearchView) findViewById(R.id.search_search);
+        searchSearchScanImageButton = (ImageButton) findViewById(R.id.imgbutton_search_scan);
         searchListView = (ListView) findViewById(R.id.list_search);
 
         userLayout = (LinearLayout) findViewById(R.id.layout_user);
@@ -305,6 +307,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        searchSearchScanImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openCameraIntent = new Intent(MainActivity.this, CaptureActivity.class);
+                startActivityForResult(openCameraIntent, 0);
+            }
+        });
+
         searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -448,14 +458,14 @@ public class MainActivity extends AppCompatActivity {
                         int borrowedBookAmount = resultObj.getInt("borrow_num");
                         int reservedBookAmount = resultObj.getInt("reserve_num");
                         int expireAmount = resultObj.getInt("expire_num");
-                        readerMenuWelcomeTextView.setText("Hello " + usrName);
+                        readerMenuWelcomeTextView.setText("Hello, " + usrName);
                         readerMenuBorrowedTextView.setText("Borrowed(" + String.valueOf(borrowedBookAmount) + ")");
                         readerMenuReservedTextView.setText("Reserved(" + String.valueOf(reservedBookAmount) + ")");
                         readerMenuExpireTextView.setText("Expire-date(" + String.valueOf(expireAmount) + ")");
                         //make a QR image in info page
                         String contentString = id + ":" + pwd;
                         if (!contentString.equals("")) {
-                            Bitmap qrCodeBitmap = EncodingUtils.createQRCode(contentString, 350, 350,
+                            Bitmap qrCodeBitmap = EncodingUtils.createQRCode(contentString, 500, 500,
                                     BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
                             userQrImageView.setImageBitmap(qrCodeBitmap);
                         }
