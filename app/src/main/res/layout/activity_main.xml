@@ -18,6 +18,7 @@
     <include layout="@layout/layout_sechand"/>
     <include layout="@layout/layout_book_manage" />
     <include layout="@layout/layout_reader_manage" />
+    <include layout="@layout/layout_audit"/>
 
 
 

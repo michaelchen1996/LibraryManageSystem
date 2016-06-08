@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="Title"
         android:layout_weight="1"
-        android:gravity="center_vertical"
+        android:gravity="center_horizontal"
         android:textSize="30dp"
         android:id="@+id/text_bookinfo_title" />
 
@@ -30,8 +30,8 @@
             android:layout_weight="3">
 
             <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
                 android:id="@+id/imageView"
                 android:src="@mipmap/ic_launcher"
                 />
@@ -149,7 +149,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="reserve"
+        android:text="RESERVE"
         android:textSize="20dp"
         android:id="@+id/show_button_reserve"
         />
@@ -158,7 +158,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="review"
+        android:text="REVIEW"
         android:textSize="20dp"
         android:id="@+id/show_button_review"
         />
@@ -167,7 +167,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="sec-hand"
+        android:text="SEC-HAND"
         android:textSize="20dp"
         android:id="@+id/show_button_sechand"
         />

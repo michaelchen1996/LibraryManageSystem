@@ -2,52 +2,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Title"
-        android:layout_weight="1"
-        android:textSize="30dp"
-        android:id="@+id/search_item_title" />
+    android:layout_height="wrap_content"
+    android:weightSum="1">
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Author"
-            android:layout_weight="1"
-            android:textSize="15dp"
-            android:id="@+id/search_item_author" />
+            android:text="Title"
+            android:textSize="30dp"
+            android:id="@+id/search_item_title" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ISBN"
-            android:layout_weight="1"
-            android:textSize="15dp"
-            android:id="@+id/search_item_isbn" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Author"
+                android:textSize="15dp"
+                android:id="@+id/search_item_author" />
 
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ISBN"
+                android:textSize="15dp"
+                android:id="@+id/search_item_isbn" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="call_num"
-            android:layout_weight="1"
             android:textSize="15dp"
             android:id="@+id/search_item_call_num" />
 
@@ -55,10 +43,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Status"
-            android:layout_weight="1"
             android:textSize="15dp"
             android:id="@+id/search_item_status" />
 
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@mipmap/ic_launcher"
+        android:layout_gravity="center_vertical"  />
+
 
 </LinearLayout>
